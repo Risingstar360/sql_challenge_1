@@ -12,3 +12,44 @@ SELECT category, COUNT(*) FROM analytics GROUP BY category;
 SELECT * FROM analytics ORDER BY reviews DESC LIMIT 5;
 
 --question 5 Find the app that has the most reviews with a rating greater than equal to 4.8.--
+SELECT *  FROM analytics WHERE rating >= 4.8 ORDER BY reviews DESC LIMIT 1;
+
+
+--question 6 Find the average rating for each category ordered by the highest rated to lowest rated--
+SELECT category, AVG(rating) FROM analytics GROUP BY category ORDER BY avg DESC;
+
+
+--question 7 Find the name, price, and rating of the most expensive app with a rating that’s less than 3.--
+SELECT app_name, price, rating FROM analytics WHERE rating < 3.0 ORDER BY price DESC LIMIT 1;
+
+
+--question 8 Find all apps with a min install not exceeding 50, that have a rating. Order your results by highest rated first.--
+SELECT * FROM analytics WHERE min_installs <= 50 AND rating > 0.1 ORDER BY rating DESC;
+
+
+--question 9  Find the names of all apps that are rated less than 3 with at least 10000 reviews.--
+SELECT app_name, rating, reviews FROM analytics WHERE rating < 3.0 AND reviews >=10000;
+
+
+--question 10  Find the top 10 most-reviewed apps that cost between 10 cents and a dollar.--
+FROM analytics WHERE price >= 0.10 AND price <= 1.00 ORDER BY reviews DESC LIMIT 10;
+
+
+--question 11 Find the most out of date app. Hint: You don’t need to do it this way, but it’s possible to do with a subquery: http://www.postgresqltutorial.com/postgresql-max-function/--
+SELECT * FROM analytics WHERE last_updated = (SELECT MIN(last_updated) FROM analytics);
+
+
+--question 12 Find the most expensive app (the query is very similar to #11).--
+SELECT * FROM analytics WHERE price = (SELECT MAX(price) FROM analytics);
+
+
+--question 13 Count all the reviews in the Google Play Store.--
+SELECT SUM(reviews) AS total FROM analytics ORDER BY total DESC;
+
+
+--question 14  Find all the categories that have more than 300 apps in them.--
+SELECT category FROM analytics GROUP by category HAVING COUNT(*) > 300;
+
+
+--question 15  Find the app that has the highest proportion of min_installs to reviews, among apps that have been installed at least 100,000 times. Display the name of the app along with the number of reviews, the min_installs, and the proportion.--
+SELECT app_name, reviews, min_installs, min_installs / reviews AS proportion FROM analytics WHERE min_installs >= 100000 ORDER BY proportion DESC LIMIT 1;
